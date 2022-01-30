@@ -74,6 +74,7 @@ def main(path, recursive, mod):
     abspath_len = len(abspath) + 1
     for i, (path, filename) in enumerate(filepaths):
         filepath = os.path.join(path, filename)
+        modTime = os.path.getmtime(filepath)
         logger.info(
             f'{i + 1:>{progress_digits}}/{num_files} - {filepath[abspath_len:]}')
         if filename.endswith('.mp4') or filename.endswith('.3gp'):
@@ -106,8 +107,6 @@ def main(path, recursive, mod):
                 make_new_exif(filename)
             piexif.insert(exif_bytes, filepath)
             if mod:
-                date = get_datetime(filename)
-                modTime = date.timestamp()
                 os.utime(filepath, (modTime, modTime))
 
     logger.info('Finished processing files')
